@@ -204,6 +204,13 @@ public class BasicSpringDataRepositoryDatabaseService<
             throw new HashAlreadyExistsException(dbAccession.getHashedMessage(), dbAccession.getAccession());
         }
     }
+    private void checkHashDoesNotExistWithAccessionDifferentThan(String hash, ACCESSION accession)
+            throws HashAlreadyExistsException {
+        final ACCESSION_ENTITY dbAccession = repository.findOne(hash);
+        if (dbAccession != null && dbAccession.getAccession() != accession) {
+            throw new HashAlreadyExistsException(dbAccession.getHashedMessage(), dbAccession.getAccession());
+        }
+    }
 
     /**
      * @param accessionId
@@ -223,7 +230,7 @@ public class BasicSpringDataRepositoryDatabaseService<
             throws AccessionDoesNotExistException, HashAlreadyExistsException, AccessionMergedException,
             AccessionDeprecatedException {
         ACCESSION_ENTITY oldVersion = doFindAccessionVersion(accession, version);
-        checkHashDoesNotExist(hash);
+        checkHashDoesNotExistWithAccessionDifferentThan(hash, oldVersion.getAccession());
 
         inactiveAccessionService.update(oldVersion, "Version update");
         repository.delete(oldVersion);

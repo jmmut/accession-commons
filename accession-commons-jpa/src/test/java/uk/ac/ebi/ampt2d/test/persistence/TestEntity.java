@@ -35,7 +35,8 @@ public class TestEntity extends AccessionedEntity<TestModel, String> implements 
     }
 
     public TestEntity(AccessionWrapper<TestModel, String, String> model) {
-        this(model.getAccession(), model.getHash(), model.getVersion(), model.getData().getValue(), "");
+        this(model.getAccession(), model.getHash(), model.getVersion(), model.getData().getValue(),
+             model.getData().getNonIdentifyingValue());
     }
 
     public TestEntity(String accession, String hashedMessage, int version, String something,
