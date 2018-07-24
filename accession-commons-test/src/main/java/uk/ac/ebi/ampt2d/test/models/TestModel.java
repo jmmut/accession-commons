@@ -37,18 +37,18 @@ public interface TestModel {
         };
     }
 
-//    static TestModel of(String value, String nonIdentifyingValue) {
-//        return new TestModel() {
-//            @Override
-//            public String getValue() {
-//                return value;
-//            }
-//
-//            @Override
-//            public String getNonIdentifyingValue() {
-//                return nonIdentifyingValue;
-//            }
-//        };
-//    }
-//
+    static TestModel of(String value, String nonIdentifyingValue) {
+        return new TestModel() {
+            @Override
+            public String getValue() {
+                return value;
+            }
+
+            @Override
+            public String getNonIdentifyingValue() {
+                return nonIdentifyingValue;
+            }
+        };
+    }
+
 }

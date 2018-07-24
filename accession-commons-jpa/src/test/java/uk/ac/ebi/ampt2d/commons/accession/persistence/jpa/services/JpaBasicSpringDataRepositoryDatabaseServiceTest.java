@@ -168,24 +168,20 @@ public class JpaBasicSpringDataRepositoryDatabaseServiceTest {
     @Test(expected = HashAlreadyExistsException.class)
     public void updateWithExistingObjectFails() throws AccessionDoesNotExistException,
             HashAlreadyExistsException, AccessionDeprecatedException, AccessionMergedException {
-        service.save(Arrays.asList(new AccessionWrapper<>("a2", "h1", TestModel.of("something2"))));
-        service.update("a2", "h1", TestModel.of("something2"), 1);
-    }
-    
-    @Test(expected = HashAlreadyExistsException.class)
-    public void updateWithExistingObjectFails_() throws AccessionDoesNotExistException,
-            HashAlreadyExistsException, AccessionDeprecatedException, AccessionMergedException {
         service.save(Arrays.asList(new AccessionWrapper<>("a1", "h1", TestModel.of("something1"))));
         service.save(Arrays.asList(new AccessionWrapper<>("a2", "h2", TestModel.of("something2"))));
         service.update("a1", "h2", TestModel.of("something2"), 1);
     }
 
-//    @Test(expected = HashAlreadyExistsException.class)
-//    public void updateNonIdentifyingField() throws AccessionDoesNotExistException,
-//            HashAlreadyExistsException, AccessionDeprecatedException, AccessionMergedException {
-//        service.save(Arrays.asList(new AccessionWrapper<>("a2", "h1", TestModel.of("something2", "nonIdentifying 1"))));
-//        service.update("a2", "h1", TestModel.of("something2"), 1);
-//    }
+    @Test
+    public void updateNonIdentifyingField() throws AccessionDoesNotExistException,
+            HashAlreadyExistsException, AccessionDeprecatedException, AccessionMergedException {
+        service.save(Arrays.asList(new AccessionWrapper<>("a2", "h1", TestModel.of("something2", "nonIdentifying 1"))));
+        AccessionVersionsWrapper<TestModel, String, String> update = service.update(
+                "a2", "h1", TestModel.of("something2", "nonIdentifying 2"), 1);
+        assertEquals(1, update.getModelWrappers().size());
+        assertEquals("nonIdentifying 2", update.getModelWrappers().get(0).getData().getNonIdentifyingValue());
+    }
 
     @Test
     public void updateDoesNotCreateNewVersion() throws AccessionDoesNotExistException,
